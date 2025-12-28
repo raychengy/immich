@@ -37,12 +37,18 @@ This repository contains the `docker-compose.yml` file to run Immich.
 
 3.  Edit the `.env` file and change the default values. At a minimum, you should change `DB_PASSWORD`.
 
-4.  Start the services:
+4.  Create the necessary directories for the database, library and backups.
+    ```sh
+    mkdir -p ./pgdata ./library ./backups
+    ```
+    Ensure these directories are writable by the user running the Docker command.
+
+5.  Start the services:
     ```sh
     docker-compose up -d
     ```
 
-5.  Open your browser and go to `http://localhost:2283`.
+6.  Open your browser and go to `http://localhost:2283`.
 
 ## Contributing
 
