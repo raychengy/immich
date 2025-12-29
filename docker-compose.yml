@@ -2,12 +2,15 @@ services:
   immich-server:
     container_name: immich_server
     image: ghcr.io/immich-app/immich-server:${IMMICH_VERSION:-release}
+    environment:
+      - DB_PASSWORD
+      - DB_USERNAME
+      - DB_DATABASE_NAME
+      - IMMICH_VERSION
+      - TZ
     volumes:
-      # Do not edit the next line. If you want to change the media storage location on your system, edit the value of UPLOAD_LOCATION in the .env file
       - ${UPLOAD_LOCATION}:/usr/src/app/upload
       - /etc/localtime:/etc/localtime:ro
-    env_file:
-      - .env
     ports:
       - 2283:2283
     depends_on:
@@ -22,13 +25,12 @@ services:
 
   immich-machine-learning:
     container_name: immich_machine_learning
-    # For hardware acceleration, add one of -[armnn, cuda, rocm, openvino, rknn] to the image tag.
-    # Example tag: ${IMMICH_VERSION:-release}-cuda
     image: ghcr.io/immich-app/immich-machine-learning:${IMMICH_VERSION:-release}-openvino
+    environment:
+      - TZ
+      - IMMICH_VERSION
     volumes:
       - model-cache:/cache
-    env_file:
-      - .env
     restart: always
     # Hardware Acceleration for AI (OpenVINO for Intel)
     device_cgroup_rules:
@@ -76,8 +78,7 @@ services:
       BACKUP_KEEP_DAYS: 7
       BACKUP_DIR: /backups
     volumes:
-      # Dumps backups to a "backups" folder next to your docker-compose file
-      - ./backups:/backups
+      - ${BACKUP_LOCATION}:/backups
     depends_on:
       - database
 

@@ -111,3 +111,4 @@ mobile/ios/fastlane/report.xml
 library
 backups
 postgres
+pgdata
